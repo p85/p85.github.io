@@ -15,7 +15,13 @@ function renumber(basicProgram) {
                 const foundFlag2 = basicProgramArr[ii].match(new RegExp('.+' + foundFlag1[0], 'g'));
                 if (foundFlag2) {
                     const flagInside = basicProgramArr[ii].match(/\<\w+\>\s/g);
-                    const result = lineNumber2 + ' ' + foundFlag2[0].replace(foundFlag1[0], lineNumber1).replace(flagInside, '');
+                    const tmpResult = foundFlag2[0].replace(foundFlag1[0], lineNumber1).replace(flagInside, '');
+                    let result = '';
+                    if (tmpResult.match(/^\d+/g)) {
+                        result = foundFlag2[0].replace(new RegExp(foundFlag1[0], 'g'), lineNumber1).replace(flagInside, '');
+                    } else {
+                        result = lineNumber2 + ' ' + foundFlag2[0].replace(new RegExp(foundFlag1[0], 'g'), lineNumber1).replace(flagInside, '');
+                    }
                     output.push(result);
                 }
             }
