@@ -13,43 +13,17 @@ function processArray(arr) {
         if (leftToken) { leftToken = leftToken[0]; }
         let otherToken = arr[i].match(matchOtherToken);
         if (otherToken) { otherToken = otherToken[0]; }
-        const tokObj = processTokens(i, leftToken, otherToken);
+        const tokObj = createTokObj(i, leftToken, otherToken);
         arr = processTokenObj(arr, oarr, tokObj, i);
     }
     return arr.join('\n');
 }
 
-function processTokens(lnr, leftTok, otherTok) {
-    let out = {};
-    if (leftTok && !otherTok) {
-        out = createTokObj(lnr, leftTok, null);
-    } else if (leftTok && otherTok) {
-        out = createTokObj(lnr, leftTok, otherTok);
-    } else if (otherTok && !leftTok) {
-        out = createTokObj(lnr, null, otherTok);
-    }
-    return out;
-}
-
 function createTokObj(lnr, leftTok, otherTok) {
-    let result = {};
-    if (leftTok && !otherTok) {
-        result = {
-            lnr: lnr,
-            leftTok: leftTok,
-        };
-    } else if (leftTok && otherTok) {
-        result = {
-            lnr: lnr,
-            leftTok: leftTok,
-            otherTok: otherTok,
-        }
-    } else if (otherTok && !leftTok) {
-        result = {
-            lnr: lnr,
-            otherTok: otherTok,
-        }
-    }
+    let result = {lnr: lnr};
+    leftTok ? result.leftTok = leftTok : delete result.leftTok;
+    otherTok ? result.otherTok = otherTok : delete result.otherTok;
+    if (Object.keys(result).length === 1) { result = {}};
     return result;
 }
 
