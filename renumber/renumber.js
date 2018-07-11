@@ -1,50 +1,95 @@
 function renumber(basicProgram) {
-    const output = [];
+    if (!basicProgram) { return; }
     const basicProgramArr = basicProgram.split('\n');
-    for (let i in basicProgramArr) {
-        const lineNumber1 = parseInt(i) * 10 + 10;
-        const foundFlag1 = basicProgramArr[i].match(/^\<\w+\>/g);
-        if (foundFlag1) {
-            const result = basicProgramArr[i].replace(foundFlag1[0], lineNumber1);
-            const flagInside = result.match(/\<\w+\>/g);
-            if(!flagInside) {
-                output.push(result);
-            }
-            for (let ii in basicProgramArr) {
-                const lineNumber2 = parseInt(ii) * 10 + 10;
-                const foundFlag2 = basicProgramArr[ii].match(new RegExp('.+' + foundFlag1[0], 'g'));
-                if (foundFlag2) {
-                    const flagInside = basicProgramArr[ii].match(/\<\w+\>\s/g);
-                    const tmpResult = foundFlag2[0].replace(foundFlag1[0], lineNumber1).replace(flagInside, '');
-                    let result = '';
-                    if (tmpResult.match(/^\d+/g)) {
-                        result = foundFlag2[0].replace(new RegExp(foundFlag1[0], 'g'), lineNumber1).replace(flagInside, '');
-                    } else {
-                        result = lineNumber2 + ' ' + foundFlag2[0].replace(new RegExp(foundFlag1[0], 'g'), lineNumber1).replace(flagInside, '');
-                    }
-                    output.push(result);
-                }
-            }
-        } else if (!basicProgramArr[i].match(/.+\<.+\>/g)) {
-            const result = lineNumber1 + ' ' + basicProgramArr[i];
-            output.push(result);
-        }
-    }
-    return output.sort(naturalCompare).join('\n');
+    return processArray(basicProgramArr);
 }
 
-function naturalCompare(a, b) {
-    var ax = [], bx = [];
-    a.replace(/(\d+)|(\D+)/g, function (_, $1, $2) { ax.push([$1 || Infinity, $2 || ""]) });
-    b.replace(/(\d+)|(\D+)/g, function (_, $1, $2) { bx.push([$1 || Infinity, $2 || ""]) });
-    while (ax.length && bx.length) {
-        var an = ax.shift();
-        var bn = bx.shift();
-        var nn = (an[0] - bn[0]) || an[1].localeCompare(bn[1]);
-        if (nn) return nn;
+function processArray(arr) {
+    const matchLeftToken = /^\<\w+\>/g;
+    const matchOtherToken = /\<\w+\>$/g;
+    const oarr = Array.from(arr);
+    for (let i in arr) {
+        let leftToken = arr[i].match(matchLeftToken);
+        if (leftToken) { leftToken = leftToken[0]; }
+        let otherToken = arr[i].match(matchOtherToken);
+        if (otherToken) { otherToken = otherToken[0]; }
+        const tokObj = processTokens(i, leftToken, otherToken);
+        arr = processTokenObj(arr, oarr, tokObj, i);
     }
-    return ax.length - bx.length;
+    return arr.join('\n');
 }
+
+function processTokens(lnr, leftTok, otherTok) {
+    let out = {};
+    if (leftTok && !otherTok) {
+        out = createTokObj(lnr, leftTok, null);
+    } else if (leftTok && otherTok) {
+        out = createTokObj(lnr, leftTok, otherTok);
+    } else if (otherTok && !leftTok) {
+        out = createTokObj(lnr, null, otherTok);
+    }
+    return out;
+}
+
+function createTokObj(lnr, leftTok, otherTok) {
+    let result = {};
+    if (leftTok && !otherTok) {
+        result = {
+            lnr: lnr,
+            leftTok: leftTok,
+        };
+    } else if (leftTok && otherTok) {
+        result = {
+            lnr: lnr,
+            leftTok: leftTok,
+            otherTok: otherTok,
+        }
+    } else if (otherTok && !leftTok) {
+        result = {
+            lnr: lnr,
+            otherTok: otherTok,
+        }
+    }
+    return result;
+}
+
+function processTokenObj(arr, oarr, tokObj, ln) {
+    if (!isEmpty(tokObj)) {
+        const lnr = tokObj.lnr;
+        const leftTok = tokObj.leftTok;
+        const otherTok = tokObj.otherTok;
+        if (leftTok && !otherTok) {
+            arr[lnr] = arr[lnr].replace(leftTok, lnr);
+        } else if (leftTok && otherTok) {
+            const ol = findOtherLineNumber(oarr, otherTok);
+            arr[lnr] = arr[lnr].replace(leftTok, lnr).replace(otherTok, ol);
+        } else if (otherTok && !leftTok) {
+            const ol = findOtherLineNumber(oarr, otherTok);
+            arr[lnr] = lnr + ' ' + arr[lnr].replace(otherTok, ol);
+        }
+    } else {
+        arr[ln] = ln + ' ' + arr[ln];
+    }
+    return arr;
+}
+
+function isEmpty(obj) {
+    if (obj) {
+        return Object.keys(obj).length === 0 && obj.constructor === Object;
+    } else {
+        return true;
+    }
+}
+
+function findOtherLineNumber(oarr, tok) {
+    let ret;
+    for (let i in oarr) {
+        const m = oarr[i].match(new RegExp('^' + tok + '+', 'g'));
+        if (m) { ret = i; break; };
+    }
+    return ret;
+}
+
 
 function renumberThis(text) {
     document.getElementById('txt').value = renumber(text);
