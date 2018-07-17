@@ -4,7 +4,22 @@ ___.                 .__
  | \_\ \/ __ \_\___ \|  \  \___ 
  |___  (____  /____  >__|\___  >
      \/     \/     \/        \/ 
-         Manual by archer (modified 10.07.2018)
+         Manual by archer (modified 17.07.2018)
+
+
+
+Changelog
+---------
+
+10.07.2018
+ - added INSTR
+ - added DIR$
+ - changed how INKEY$ works
+ - fixed POKE Syntax
+ - updated FAQ
+17.07.2018
+ - changed how INKEY$ works
+ - added POLKEY$
 
 
 1. Overview of Commands
@@ -66,6 +81,7 @@ pclear1   - reserves two pages of memory (no effect)
 peek      - read a value from the specified memory location
 pmode0    - selects a reosultion and first memory page of a low resolution graphic screen. (0 - 128 x 96, 2 color) (no effect)
 poke      - write a byte of data into the specified memory location
+polkey$   - returns one character read from the terminal. when no key is hit within one second, it returns an empty string
 print     - prints a expression on the screen
 r2d       - converts radians to degrees
 randomize - reseed the random number generator
@@ -294,7 +310,7 @@ val       - returns the numerical value of the specified string value
  
  INKEY$
  ------
- returns one character read from the terminal. if no key is hit within 1 second, it will return ""
+ returns one character read from the terminal. it will wait till any character is being typed
  
  10 A = INKEY$
  20 PRINT A
@@ -427,6 +443,14 @@ val       - returns the numerical value of the specified string value
  write a byte of data(m) into the specified memory location(n)
  
  10 POKE 1300, 255
+ 
+ 
+ POLKEY$
+ -------
+ returns one character read from the terminal. when no key is hit within one second, it returns an empty string
+
+ 10 A = POLKEY$
+ 20 PRINT A
  
  
  PRINT expression
