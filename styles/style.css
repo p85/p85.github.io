@@ -1,0 +1,128 @@
+@font-face {
+  font-family: "FixedsysExcelsior301Regular";
+  src: url("fsex300-webfont.eot");
+  src: url("fsex300-webfont.eot?#iefix") format("embedded-opentype"),
+    url("fsex300-webfont.woff") format("woff"),
+    url("fsex300-webfont.ttf") format("truetype"),
+    url("fsex300-webfont.svg#FixedsysExcelsior301Regular") format("svg");
+  font-style: normal;
+  -webkit-font-smoothing: aliased;
+  font-smooth: never;
+}
+
+@keyframes cursorblink {
+  0% {opacity: 1.0;}
+  50% {opacity: 0.0;}
+  100% {opacity: 1.0;}
+}
+
+@keyframes dir {
+  0% {content: "d";}
+  50% {content: "di";}
+  100% {content: "dir";}
+}
+
+@keyframes crlf {
+  100% {margin-top: 50px;}
+}
+
+@keyframes showdir {
+  100% {visibility: visible;}
+}
+
+@keyframes n1 {
+  14.28% {content: "XM";}
+  28.56% {content: "XMas_";}
+  42.84% {content: "XMas_201";}
+  57.12% {content: "XMas_2018_In";}
+  71.4% {content: "XMas_2018_Intro";}
+  85.68% {content: "XMas_2018_Intro.e";}
+  100% {content: "XMas_2018_Intro.exe";}
+}
+
+@keyframes n2 {
+  11.11% {content: "ty"}
+  22.22% {content: "type "}
+  33.33% {content: "type te"}
+  44.44% {content: "type teleb"}
+  55.55% {content: "type telebas"}
+  66.66% {content: "type telebasic_m"}
+  77.77% {content: "type telebasic_manu"}
+  88.88% {content: "type telebasic_manual.t"}
+  100% {content: "type telebasic_manual.txt"}
+}
+
+@keyframes n3 {
+  11.11% {content: "te";}
+  22.22% {content: "telef";}
+  33.33% {content: "telefrag";}
+  44.44% {content: "telefrag_ma";}
+  55.55% {content: "telefrag_map_c";}
+  66.66% {content: "telefrag_map_crea";}
+  77.77% {content: "telefrag_map_creator";}
+  88.88% {content: "telefrag_map_creator.ex";}
+  100% {content: "telefrag_map_creator.exe";}
+}
+
+@keyframes n4 {
+  14.28% {content: "ren";}
+  28.56% {content: "renumbe";}
+  42.84% {content: "renumber_basi";}
+  57.12% {content: "renumber_basic_pro";}
+  71.4% {content: "renumber_basic_program";}
+  85.68% {content: "renumber_basic_programs.e";}
+  100% {content: "renumber_basic_programs.exe";}
+}
+
+/* 
+n1 = xmas intro
+n2 = telebasic manual
+n3 = telefrag map creator
+n4 = renumber basic programs
+*/
+
+/* need a place to store the variables /*/
+:root {
+  --prompt: "C:\>";
+  --n1: "XMas 2018 Intro";
+  --n2: "telebasic manual";
+  --n3: "telefrag map creator";
+  --n4: "renumber basic programs";
+  --fileext: ".exe";
+  --cursor: "_";
+}
+
+body {
+  background: black;
+  color: white;
+  font-family: "FixedsysExcelsior301Regular";
+}
+#title {margin-bottom: 30px}
+
+#cmdline:before {content: var(--prompt)} /* show the prompt */
+#cmdline:after {content: ""} /* so the animation works... */
+#cursor:after { /* make the cursor blink */
+  animation: cursorblink 0.3s step-end infinite;
+  content: var(--cursor);
+}
+
+#item:hover {cursor: pointer;}
+#item[n="1"]:before {content: var(--n1)}
+#item[n="2"]:before {content: var(--n2)}
+#item[n="3"]:before {content: var(--n3)}
+#item[n="4"]:before {content: var(--n4)}
+
+#item:hover[n="1"]~#cmdline:after {animation: n1 1.3s forwards;}
+#item:hover[n="2"]~#cmdline:after {animation: n2 1.3s forwards;}
+#item:hover[n="3"]~#cmdline:after {animation: n3 1.3s forwards;}
+#item:hover[n="4"]~#cmdline:after {animation: n4 1.3s forwards;}
+
+#cmdline:after {animation: dir 0.3s forwards, crlf 5s forwards;}
+
+#item {
+  visibility: hidden;
+  animation: showdir forwards;
+  animation-delay: 2s;
+  color: white;
+  text-decoration: none;
+}
