@@ -1,0 +1,276 @@
+<body bgcolor="black" style="overflow: hidden">
+    <div id="t"></div>
+</body>
+<script>
+    class pong {
+        sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        constructor() {
+            this.pleft = { y: 0, ydir: -0.5 };
+            this.pright = { y: 0, ydir: -0.5 };
+            this.ball = { y: 0, x: 0, ydir: 0.5, xdir: 0.7 };
+            this.ballimg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAIAAAAC64paAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABZSURBVDhPxZExDsAwCAP5/3PzgbZSsnCB1FaHnm4xmIkouUZSAje7Leh1FqBxNoGd4gJT3f+OH5ktmS2ZLZktmS2ZdT+9aoGpYgK7swVodLagt/sODqYFETdoxm1fffy26gAAAABJRU5ErkJggg==';
+            document.getElementById('t').innerHTML += '<div id="pleft"></div>';
+            document.getElementById('pleft').style.position = 'absolute';
+            document.getElementById('pleft').style.left = '0%';
+            document.getElementById('pleft').style.top = pleft.y + '%';
+            document.getElementById('pleft').style.backgroundColor = 'yellow';
+            document.getElementById('t').innerHTML += '<div id="pright"></div>';
+            document.getElementById('pright').style.position = 'absolute';
+            document.getElementById('pright').style.left = '98%';
+            document.getElementById('pright').style.top = pright.y + '%';
+            document.getElementById('pright').style.backgroundColor = 'yellow';
+            document.getElementById('t').innerHTML += '<div id="ball"><img src="' + this.ballimg + '" id="ballimg"></div>';
+            document.getElementById('ball').style.position = 'absolute';
+            document.getElementById('ball').style.left = ball.x + '%';
+            document.getElementById('ball').style.top = ball.y + '%';
+            document.getElementById('pleft').style.top = ball.y + '%';
+            document.getElementById('t').style.position = 'absolute';
+            document.getElementById('t').style.width = '100%';
+            document.getElementById('t').style.height = '100%';
+            document.getElementById('t').style.cssFloat = 'inherit';
+            this.resize();
+        }
+
+        resize() {
+            this.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+            this.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+            document.getElementById('pleft').style.height = this.height / 25;
+            document.getElementById('pleft').style.width = this.width / 100;
+            document.getElementById('pright').style.height = this.height / 25;
+            document.getElementById('pright').style.width = this.width / 100;
+            document.getElementById('ballimg').style.height = this.height / 50;
+            document.getElementById('ballimg').style.width = this.width / 100;
+        }
+
+        async move() {
+            this.resize();
+            this.checkBounds();
+            this.pleft.y += this.pleft.ydir;
+            this.pright.y += this.pright.ydir;
+            this.ball.y += this.ball.ydir;
+            this.ball.x += this.ball.xdir;
+            document.getElementById('pleft').style.top = this.pleft.y + '%';
+            document.getElementById('pright').style.top = this.pright.y + '%';
+            document.getElementById('ball').style.top = this.ball.y + '%';
+            document.getElementById('ball').style.left = this.ball.x + '%';
+        }
+
+        checkBounds() {
+            if (this.pleft.y >= 96) this.pleft.ydir = -0.5;
+            if (this.pleft.y <= 0) this.pleft.ydir = 0.5;
+            if (this.pright.y >= 96) this.pright.ydir = -0.5;
+            if (this.pright.y <= 0) this.pright.ydir = 0.5;
+            if (this.ball.y >= 96) this.ball.ydir = -0.5;
+            if (this.ball.y <= 0) this.ball.ydir = 0.5;
+            if (this.ball.x >= 96) this.ball.xdir = -0.7;
+            if (this.ball.x <= 2) this.ball.xdir = 0.7;
+        }
+
+        async runner() {
+            while (1) {
+                await this.move();
+                await this.sleep(25);
+            }
+        }
+    }
+
+    class starfiel3d {
+        sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        constructor() {
+            this.resize();
+            this.maxStars = 25;
+            this.stars = [];
+            this.fontadjust = 0.4;
+            for (var i = 0; i < this.maxStars; i++) {
+                this.stars.push({
+                    x: this.minx,
+                    y: this.miny,
+                    my: -5 + Math.random() * 10,
+                    mx: -5 + Math.random() * 10,
+                    size: 0,
+                });
+                document.getElementById('t').innerHTML += this.createDiv(i);
+                const element = this.getElement('star', i);
+                element.style.position = 'absolute';
+                element.style.visibility = 'hidden';
+                element.style.color = 'white';
+            }
+        }
+
+        getElement(name, index) {
+            return document.getElementById(name + index);
+        }
+
+        async runner() {
+            while (1) {
+                await this.render();
+                await this.sleep(1);
+            }
+        }
+
+        async render() {
+            this.resize();
+            for (var i = 0; i < this.stars.length; i++) {
+                const element = this.getElement('star', i);
+                this.stars[i].x = this.stars[i].x + this.stars[i].mx * Math.cosh(this.stars[i].size / 20);
+                this.stars[i].y = this.stars[i].y + this.stars[i].my * Math.cosh(this.stars[i].size / 20);
+                this.stars[i].size += this.stars[i].size > 50 ? Math.random() > 0.95 ? this.fontadjust : 0 : this.fontadjust;
+                if (this.stars[i].x > this.width - this.stars[i].size || this.stars[i].y > this.height - (this.stars[i].size * 2) || this.stars[i].x < (-this.width - this.stars[i].size) || this.stars[i].y < (-this.height - this.stars[i].size)) {
+                    if (element.style.visibility = 'hidden') element.style.visibility = 'visible';
+                    this.stars[i].my = Math.random() * 5 - 2.5;
+                    this.stars[i].mx = Math.random() * 5 - 2.5;
+                    this.stars[i].x = this.minx;
+                    this.stars[i].y = this.miny;
+                    this.stars[i].size = 0;
+                }
+                element.style.left = this.stars[i].x + 'px';
+                element.style.top = this.stars[i].y + 'px';
+                element.style.fontSize = this.stars[i].size + 'pt';
+            }
+        }
+
+        createDiv(index) {
+            return '<div id="star' + index + '" style="top: ' + this.miny + '%;left: ' + this.minx + '%">.</div>';
+        }
+
+        resize() {
+            this.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+            this.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+            this.minx = this.width / 2;
+            this.miny = this.height / 2;
+        }
+    }
+
+    class sinescroller {
+
+        sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        async runner() {
+            while (1) {
+                await this.doSine();
+                await this.sleep(this.mainloopdelay);
+            }
+        }
+        constructor(msg) {
+            this.resize();
+            this.y;
+            this.finit = 20;
+            this.f = 25;
+            this.fneg = -1;
+            this.fpos = Math.abs(this.fneg);
+            this.fdir = this.fneg;
+            this.x;
+            this.maxmsgatonce = 20;
+            this.mainloopdelay = 500;
+            this.ydelta = 300;
+            this.letterIndex = 0;
+            this.fontfadedelay = 50;
+            this.sindelay = 100;
+            this.fsdiv = 63;
+            this.msg = msg;
+            this.ws = [];
+            this.init();
+        }
+
+        getElement(name, index) {
+            return document.getElementById(name + index);
+        }
+
+        resize() {
+            this.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+            this.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+            this.f = this.width / this.fsdiv;
+        }
+
+        init() {
+            for (var i = 0; i < this.msg.length; i++) {
+                document.getElementById('t').innerHTML += this.createDiv(i);
+                const element = this.getElement('sinescroller', i);
+                element.style.fontFamily = 'monospace';
+                element.style.fontWeight = 'bolder';
+                element.style.textShadow = '0px 0px 5px black';
+                element.style.position = 'absolute';
+                element.style.color = 'lightgrey';
+                this.ws.push(false);
+            }
+        }
+        async doSine() {
+            let counter = 0;
+            const increase = 0.15;
+            for (var i = 0; i <= 100; i += 1) {
+                this.resize();
+                this.x = i;
+                this.y = (Math.sin(counter) / 2 + 0.5) * 200 + 10;
+                this.y += this.ydelta;
+                this.y /= 10;
+                counter += increase;
+                this.changeFontVisibility(this.letterIndex, true);
+                this.wiggle(this.letterIndex);
+                const element = this.getElement('sinescroller', this.letterIndex);
+                element.style.left = this.x + '%';
+                element.style.top = this.y + '%';
+                element.innerText = this.msg.substring(this.letterIndex, this.letterIndex + 1);
+                const lastLetterIndex = this.calculateRemoveLetterIndex();
+                this.changeFontVisibility(lastLetterIndex, false);
+                this.letterIndex += 1;
+                if (this.letterIndex > this.msg.length - 1) this.letterIndex = 0;
+                await this.sleep(this.sindelay);
+            }
+        }
+
+        async changeFontVisibility(index, visible) {
+            let i;
+            const element = this.getElement('sinescroller', index);
+            for (visible ? i = 0 : i = this.f; visible ? i < this.f : i > 0; visible ? i++ : i--) {
+                element.style.fontSize = i + 'px';
+                await this.sleep(this.fontfadedelay);
+            }
+        }
+
+        async wiggle(index) {
+            if (this.ws[index] === true) return;
+            const element = this.getElement('sinescroller', index);
+            this.ws[index] = true;
+            for (let c = 0; c <= 10; c++) {
+                for (let i = 0; i <= 25; i++) {
+                    element.style.MozTransform = 'rotate(' + i + 'deg)';
+                    element.style.webkitTransform = 'rotate(' + i + 'deg)';
+                    element.style.OTransform = 'rotate(' + i + 'deg)';
+                    element.style.MSTransform = 'rotate(' + i + 'deg)';
+                    element.style.transform = 'rotate(' + i + 'deg)';
+                    await this.sleep(3);
+                }
+                await this.sleep(100);
+                for (let i = 25; i >= 0; i--) {
+                    element.style.MozTransform = 'rotate(' + i + 'deg)';
+                    element.style.webkitTransform = 'rotate(' + i + 'deg)';
+                    element.style.OTransform = 'rotate(' + i + 'deg)';
+                    element.style.MSTransform = 'rotate(' + i + 'deg)';
+                    element.style.transform = 'rotate(' + i + 'deg)';
+                    await this.sleep(3);
+                }
+                await this.sleep(100);
+            }
+            this.ws[index] = false;
+        }
+
+        calculateRemoveLetterIndex() {
+            return this.letterIndex - this.maxmsgatonce >= 0 ? this.letterIndex - this.maxmsgatonce : (this.msg.length - this.maxmsgatonce - 1) + this.letterIndex;
+        }
+
+        createDiv(index) {
+            return '<div id="sinescroller' + index + '" style="top: ' + this.x + '%;left: ' + this.y + '%"></div>';
+        }
+    }
+
+    new starfiel3d().runner();
+    const text = '  the universe works without canvas!   what surprise...    ';
+    new sinescroller(text).runner();
+    new pong().runner();
+</script>

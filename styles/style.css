@@ -74,11 +74,40 @@
   100% {content: "renumber_basic_programs.exe";}
 }
 
+@keyframes n5 {
+  14.28% {content: "cod";}
+  28.56% {content: "codewa";}
+  42.84% {content: "codewars";}
+  57.12% {content: "codewars_sol";}
+  71.4% {content: "codewars_soluti";}
+  85.68% {content: "codewars_solutions.";}
+  100% {content: "codewars_solutions.git";}
+}
+
+@keyframes n6 {
+  20% {content: "js";}
+  40% {content: "jsuni";}
+  60% {content: "jsuniver";}
+  80% {content: "jsuniverse.";}
+  100% {content: "jsuniverse.git";}
+}
+
+@keyframes n7 {
+  20% {content: "js";}
+  40% {content: "jsuni";}
+  60% {content: "jsuniver";}
+  80% {content: "jsuniverse.";}
+  100% {content: "jsuniverse.js";}
+}
+
 /* 
 n1 = xmas intro
 n2 = telebasic manual
 n3 = telefrag map creator
 n4 = renumber basic programs
+n5 = codewars solutions
+n6 = jsuniverse
+n7 = jsuniverse live
 */
 
 /* need a place to store the variables /*/
@@ -88,6 +117,9 @@ n4 = renumber basic programs
   --n2: "telebasic manual";
   --n3: "telefrag map creator";
   --n4: "renumber basic programs";
+  --n5: "codewars solutions";
+  --n6: "js universe";
+  --n7: "js universe live";
   --fileext: ".exe";
   --cursor: "_";
 }
@@ -111,11 +143,17 @@ body {
 #item[n="2"]:before {content: var(--n2)}
 #item[n="3"]:before {content: var(--n3)}
 #item[n="4"]:before {content: var(--n4)}
+#item[n="5"]:before {content: var(--n5)}
+#item[n="6"]:before {content: var(--n6)}
+#item[n="7"]:before {content: var(--n7)}
 
 #item:hover[n="1"]~#cmdline:after {animation: n1 1.3s forwards;}
 #item:hover[n="2"]~#cmdline:after {animation: n2 1.3s forwards;}
 #item:hover[n="3"]~#cmdline:after {animation: n3 1.3s forwards;}
 #item:hover[n="4"]~#cmdline:after {animation: n4 1.3s forwards;}
+#item:hover[n="5"]~#cmdline:after {animation: n5 1.3s forwards;}
+#item:hover[n="6"]~#cmdline:after {animation: n6 1.3s forwards;}
+#item:hover[n="7"]~#cmdline:after {animation: n7 1.3s forwards;}
 
 #cmdline:after {animation: dir 0.3s forwards, crlf 5s forwards;}
 
