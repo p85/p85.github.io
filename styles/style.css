@@ -100,6 +100,14 @@
   100% {content: "jsuniverse.js";}
 }
 
+@keyframes n8 {
+  20% {content: "cl";}
+  40% {content: "clir";}
+  60% {content: "clirad";}
+  80% {content: "cliradar.";}
+  100% {content: "cliradar.git";}
+}
+
 /* 
 n1 = xmas intro
 n2 = telebasic manual
@@ -108,6 +116,7 @@ n4 = renumber basic programs
 n5 = codewars solutions
 n6 = jsuniverse
 n7 = jsuniverse live
+n8 = cliradar
 */
 
 /* need a place to store the variables /*/
@@ -120,6 +129,7 @@ n7 = jsuniverse live
   --n5: "codewars solutions";
   --n6: "js universe";
   --n7: "js universe live";
+  --n8: "cliradar";
   --fileext: ".exe";
   --cursor: "_";
 }
@@ -146,6 +156,7 @@ body {
 #item[n="5"]:before {content: var(--n5)}
 #item[n="6"]:before {content: var(--n6)}
 #item[n="7"]:before {content: var(--n7)}
+#item[n="8"]:before {content: var(--n8)}
 
 #item:hover[n="1"]~#cmdline:after {animation: n1 1.3s forwards;}
 #item:hover[n="2"]~#cmdline:after {animation: n2 1.3s forwards;}
@@ -154,6 +165,7 @@ body {
 #item:hover[n="5"]~#cmdline:after {animation: n5 1.3s forwards;}
 #item:hover[n="6"]~#cmdline:after {animation: n6 1.3s forwards;}
 #item:hover[n="7"]~#cmdline:after {animation: n7 1.3s forwards;}
+#item:hover[n="8"]~#cmdline:after {animation: n8 1.3s forwards;}
 
 #cmdline:after {animation: dir 0.3s forwards, crlf 5s forwards;}
 
