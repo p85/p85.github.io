@@ -128,6 +128,14 @@
   100% {content: "telehack_basic.git";}
 }
 
+@keyframes n11 {
+  20% {content: "ab";}
+  40% {content: "abas";}
+  60% {content: "abasic";}
+  80% {content: "abasic.g";}
+  100% {content: "abasic.git";}
+}
+
 /* 
 n1 = xmas intro
 n2 = telebasic manual
@@ -139,6 +147,7 @@ n7 = jsuniverse live
 n8 = cliradar
 n9 = hackerrank solutions
 n10 = telehack bas programs
+n11 = abasic
 */
 
 /* need a place to store the variables /*/
@@ -154,6 +163,7 @@ n10 = telehack bas programs
   --n8: "cliradar";
   --n9: "hackerrank solutions";
   --n10: "telehack basic programs";
+  --n11: "abasic interpreter";
   --fileext: ".exe";
   --cursor: "_";
 }
@@ -183,6 +193,7 @@ body {
 #item[n="8"]:before {content: var(--n8)}
 #item[n="9"]:before {content: var(--n9)}
 #item[n="10"]:before {content: var(--n10)}
+#item[n="11"]:before {content: var(--n11)}
 
 #item:hover[n="1"]~#cmdline:after {animation: n1 1.3s forwards;}
 #item:hover[n="2"]~#cmdline:after {animation: n2 1.3s forwards;}
@@ -194,6 +205,7 @@ body {
 #item:hover[n="8"]~#cmdline:after {animation: n8 1.3s forwards;}
 #item:hover[n="9"]~#cmdline:after {animation: n9 1.3s forwards;}
 #item:hover[n="10"]~#cmdline:after {animation: n10 1.3s forwards;}
+#item:hover[n="11"]~#cmdline:after {animation: n11 1.3s forwards;}
 
 #cmdline:after {animation: dir 0.3s forwards, crlf 5s forwards;}
 
